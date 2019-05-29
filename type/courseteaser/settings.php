@@ -68,6 +68,11 @@ $courseteasersettings[] = new admin_setting_configcheckbox('unilabeltype_courset
     false
 );
 
+$courseteasersettings[] = new admin_setting_configcheckbox('unilabeltype_courseteaser/showcoursesummary',
+    get_string('default_showcoursesummary', 'unilabeltype_courseteaser'),
+    '',
+    false);
+
 $courseteasersettings[] = new \mod_unilabel\setting_configselect_button('unilabeltype_courseteaser/custombutton',
     get_string('custombutton', 'unilabeltype_courseteaser'),
     '',

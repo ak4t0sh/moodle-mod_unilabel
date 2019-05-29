@@ -98,6 +98,7 @@ class content_type extends \mod_unilabel\content_type {
             $numbers
         );
         $mform->disabledIf($prefix.'carouselinterval', $prefix.'presentation', 'ne', 'carousel');
+        $mform->addElement('advcheckbox', $prefix.'showcoursesummary', get_string('showcoursesummary', 'unilabeltype_courseteaser'));
     }
 
     /**
@@ -116,11 +117,13 @@ class content_type extends \mod_unilabel\content_type {
             $data[$prefix.'columns'] = $this->config->columns;
             $data[$prefix.'carouselinterval'] = $this->config->carouselinterval;
             $data[$prefix.'showintro'] = $this->config->showintro;
+            $data[$prefix.'showcoursesummary'] = $this->config->showcoursesummary;
         } else {
             $data[$prefix.'presentation'] = $unilabeltyperecord->presentation;
             $data[$prefix.'columns'] = $unilabeltyperecord->columns;
             $data[$prefix.'carouselinterval'] = $unilabeltyperecord->carouselinterval;
             $data[$prefix.'showintro'] = $unilabeltyperecord->showintro;
+            $data[$prefix.'showcoursesummary'] = $unilabeltyperecord->showcoursesummary;
             $data[$prefix.'courses'] = explode(',', $unilabeltyperecord->courses);
         }
 
@@ -226,6 +229,7 @@ class content_type extends \mod_unilabel\content_type {
         $unilabeltyperecord->columns = !empty($formdata->{$prefix.'columns'}) ? $formdata->{$prefix.'columns'} : 0;
         $unilabeltyperecord->carouselinterval = $formdata->{$prefix.'carouselinterval'};
         $unilabeltyperecord->showintro = $formdata->{$prefix.'showintro'};
+        $unilabeltyperecord->showcoursesummary = $formdata->{$prefix.'showcoursesummary'};
         $unilabeltyperecord->courses = implode(',', $formdata->{$prefix.'courses'});
 
         if (empty($unilabeltyperecord->id)) {
@@ -304,6 +308,10 @@ class content_type extends \mod_unilabel\content_type {
                     $file->get_filename()
                 );
                 $item->imageurl = $imageurl;
+            }
+            if (!empty($unilabeltyperecord->showcoursesummary) && $cil->has_summary()) {
+                $chelper = new \coursecat_helper();
+                $item->summary = $chelper->get_course_formatted_summary($cil);
             }
             $item->nr = $counter;
             if ($counter == 0) {
